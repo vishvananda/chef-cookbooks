@@ -114,6 +114,15 @@ template "/etc/glance/glance-api-paste.ini" do
   notifies :restart, resources(:service => "glance-api"), :immediately
 end
 
+template "/etc/glance/policy.json" do
+  source "policy.json.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  notifies :restart, resources(:service => "glance-api"), :immediately
+end
+ 
+
 bash "default image setup" do
   cwd "/tmp"
   user "root"
