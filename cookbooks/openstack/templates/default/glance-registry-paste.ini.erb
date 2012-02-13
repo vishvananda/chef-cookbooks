@@ -1,14 +1,7 @@
-# Default minimal pipeline
 [pipeline:glance-registry]
-pipeline = context registryapp
-
-# Use the following pipeline for keystone auth
-# i.e. in glance-registry.conf:
-#   [paste_deploy]
-#   flavor = keystone
-#
-[pipeline:glance-registry-keystone]
-pipeline = authtoken auth-context registryapp
+#pipeline = context registryapp
+# NOTE: use the following pipeline for keystone
+pipeline = authtoken auth-context context registryapp
 
 [app:registryapp]
 paste.app_factory = glance.common.wsgi:app_factory
@@ -27,7 +20,7 @@ service_port = <%= @service_port %>
 auth_host = <%= @ip_address %>
 auth_port = <%= @admin_port %>
 auth_protocol = http
-auth_uri = http://<%= @ip_address %>:<%= @service_port %>/v2.0
+auth_uri = http://<%= @ip_address %>:<%= @service_port %>/
 admin_token = <%= @admin_token %>
 
 [filter:auth-context]
