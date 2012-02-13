@@ -148,5 +148,6 @@ bash "default image setup" do
       glance -A #{node[:keystone][:admin_token]} add name="ubuntu-11.04-server" disk_format=ami container_format=ami kernel_id=1 ramdisk_id=2 < images/natty-server-uec-amd64.img
 
   EOH
-  not_if do File.exists?("/var/lib/glance/images/3") end
+  # not_if do File.exists?("/var/lib/glance/images/3") end
+  not_if "glance -A #{node[:keystone][:admin_token]} index | grep ubuntu-11.04"
 end
