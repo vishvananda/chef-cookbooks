@@ -114,6 +114,20 @@ template "/etc/glance/glance-api-paste.ini" do
   notifies :restart, resources(:service => "glance-api"), :immediately
 end
 
+template "/etc/glance/glance-registry-paste.ini" do
+  source "glance-registry-paste.ini.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  variables(
+    :ip_address => node[:controller_ipaddress],
+    :service_port => node[:keystone][:service_port],
+    :admin_port => node[:keystone][:admin_port],
+    :admin_token => node[:keystone][:admin_token]
+  )
+  notifies :restart, resources(:service => "glance-registry"), :immediately
+end
+
 template "/etc/glance/policy.json" do
   source "policy.json.erb"
   owner "root"
