@@ -18,7 +18,7 @@
 #
 
 apt_repository "rcb-packages" do
-  uri "#{node[:package_url]}"
+  uri "#{node[:package_url]}/#{node[:package_component]}"
   distribution node['lsb']['codename']
   components [node[:package_component]]
   keyserver "keyserver.ubuntu.com"
