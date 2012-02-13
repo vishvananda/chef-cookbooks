@@ -19,5 +19,7 @@
     "bridge": "br200",
     "bridge_dev": "eth2"
   },
+  "package_url": "http://build.monkeypuppetlabs.com/proposed-packages",
+  "package_component": "essex-e3",
   "run_list": [ "recipe[apt]", "recipe[openstack::allinone]" ]
 }
