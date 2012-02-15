@@ -32,6 +32,7 @@ service "nova-api" do
   supports :status => true, :restart => true
   action :enable
   subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
+  subscribes :restart, resources(:template => "/etc/nova/policy.json"), :delayed
 end
 
 template "/etc/nova/api-paste.ini" do
@@ -48,3 +49,12 @@ template "/etc/nova/api-paste.ini" do
   )
   notifies :restart, resources(:service => "nova-api"), :immediately
 end
+
+template "/etc/nova/policy.json" do
+  source "nova-api-policy.json.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  notifies :restart, resources(:service => "nova-api"), :immediately
+end
+
