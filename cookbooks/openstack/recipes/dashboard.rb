@@ -83,6 +83,7 @@ template "/var/lib/dash/local/local_settings.py" do
             :ip_address => node[:controller_ipaddress],
             :db_name => node[:dash][:db],
             :service_port => node[:keystone][:service_port],
+            :admin_port => node[:keystone][:admin_port],
             :admin_token => node[:keystone][:admin_token]
             )
   notifies :restart, resources(:service => "apache2")

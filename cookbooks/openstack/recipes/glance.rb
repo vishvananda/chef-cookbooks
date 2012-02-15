@@ -129,7 +129,7 @@ template "/etc/glance/glance-registry-paste.ini" do
 end
 
 template "/etc/glance/policy.json" do
-  source "policy.json.erb"
+  source "glance-api-policy.json.erb"
   owner "root"
   group "root"
   mode "0644"
