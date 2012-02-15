@@ -45,6 +45,19 @@ execute "a2enmod wsgi" do
   not_if "test -L /etc/apache2/mods-enabled/wsgi.load"
 end
 
+execute "a2enmod ssl" do
+  command "a2enmod ssl"
+  action :run
+  notifies :restart, resources(:service => "apache2"), :immediately
+  not_if "test -L /etc/apache2/mods-enabled/ssl.load"
+end
+
+template "/etc/apache2/sites-available/dash" do
+  source "dash.ssl.erb"
+  owner "root"
+  mode "0644"
+end
+
 execute "a2ensite dash" do
   command "a2ensite dash"
   action :run
