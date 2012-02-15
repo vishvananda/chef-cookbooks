@@ -1,3 +1,9 @@
+<VirtualHost *:80>
+   RewriteEngine On
+   RewriteCond %{HTTPS} off
+   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R]
+</VirtualHost>
+
 <VirtualHost *:443>
   WSGIScriptAlias / /var/lib/dash/dashboard/wsgi/django.wsgi
   WSGIDaemonProcess dashboard user=www-data group=www-data processes=3 threads=10 python-path=/var/lib/dash
