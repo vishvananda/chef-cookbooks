@@ -28,13 +28,6 @@ package "nova-api" do
   options "-o Dpkg::Options::='--force-confold' --force-yes"
 end
 
-service "nova-api" do
-  supports :status => true, :restart => true
-  action :enable
-  subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
-  subscribes :restart, resources(:template => "/etc/nova/policy.json"), :delayed
-end
-
 template "/etc/nova/api-paste.ini" do
   source "api-paste.ini.erb"
   owner "root"
@@ -47,7 +40,7 @@ template "/etc/nova/api-paste.ini" do
     :admin_port => node[:keystone][:admin_port],
     :admin_token => node[:keystone][:admin_token]
   )
-  notifies :restart, resources(:service => "nova-api"), :immediately
+#  notifies :restart, resources(:service => "nova-api"), :immediately
 end
 
 template "/etc/nova/policy.json" do
@@ -55,6 +48,12 @@ template "/etc/nova/policy.json" do
   owner "root"
   group "root"
   mode "0644"
-  notifies :restart, resources(:service => "nova-api"), :immediately
+#  notifies :restart, resources(:service => "nova-api"), :immediately
 end
 
+service "nova-api" do
+  supports :status => true, :restart => true
+  action :enable
+  subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
+  subscribes :restart, resources(:template => "/etc/nova/policy.json"), :delayed
+end
