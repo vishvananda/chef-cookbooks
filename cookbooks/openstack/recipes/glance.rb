@@ -142,7 +142,7 @@ bash "default image setup" do
   user "root"
   code <<-EOH
       set -e
-      mkdir images
+      mkdir -p images
       curl #{node[:image][:natty]} | tar -zx -C images/
       kid=$(glance -A #{node[:keystone][:admin_token]} add name="ubuntu-11.04-kernel" disk_format=aki container_format=aki < images/natty-server-uec-amd64-vmlinuz-virtual | cut -d: -f2 | sed 's/ //')
       rid=$(glance -A #{node[:keystone][:admin_token]} add name="ubuntu-11.04-initrd" disk_format=ari container_format=ari < images/natty-server-uec-amd64-loader | cut -d: -f2 | sed 's/ //')
