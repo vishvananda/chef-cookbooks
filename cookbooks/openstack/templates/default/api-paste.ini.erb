@@ -65,7 +65,7 @@ paste.app_factory = nova.api.ec2:Executor.factory
 paste.app_factory = nova.api.ec2:Versions.factory
 
 [app:ec2md]
-paste.app_factory = nova.api.ec2.metadatarequesthandler:MetadataRequestHandler.factory
+paste.app_factory = nova.api.metadata.handler:MetadataRequestHandler.factory
 
 
 #############
@@ -128,6 +128,8 @@ paste.app_factory = nova.api.openstack.versions:Versions.factory
 paste.filter_factory = nova.api.auth:KeystoneContext.factory
 <% elsif @component == "diablo-final" -%>
 paste.filter_factory = keystone.middleware.nova_keystone_context:NovaKeystoneContext.factory
+<% else -%>
+paste.filter_factory = nova.api.auth:NovaKeystoneContext.factory
 <% end -%>
 
 [filter:authtoken]
@@ -138,5 +140,5 @@ service_port = <%= @service_port %>
 auth_host = <%= @ip_address %>
 auth_port = <%= @admin_port %>
 auth_protocol = http
-auth_uri = http://<%= @ip_address %>:<%= @service_port %>/v2.0/
+auth_uri = http://<%= @ip_address %>:<%= @service_port %>/v2.0
 admin_token = <%= @admin_token %>
