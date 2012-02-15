@@ -7,9 +7,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -135,17 +135,18 @@ template "/etc/glance/policy.json" do
   mode "0644"
   notifies :restart, resources(:service => "glance-api"), :immediately
 end
- 
+
 
 bash "default image setup" do
   cwd "/tmp"
   user "root"
   code <<-EOH
+      set -e
       mkdir images
       curl #{node[:image][:natty]} | tar -zx -C images/
-      glance -A #{node[:keystone][:admin_token]} add name="ubuntu-11.04-kernel" disk_format=aki container_format=aki < images/natty-server-uec-amd64-vmlinuz-virtual
-      glance -A #{node[:keystone][:admin_token]} add name="ubuntu-11.04-initrd" disk_format=ari container_format=ari < images/natty-server-uec-amd64-loader
-      glance -A #{node[:keystone][:admin_token]} add name="ubuntu-11.04-server" disk_format=ami container_format=ami kernel_id=1 ramdisk_id=2 < images/natty-server-uec-amd64.img
+      kid=$(glance -A #{node[:keystone][:admin_token]} add name="ubuntu-11.04-kernel" disk_format=aki container_format=aki < images/natty-server-uec-amd64-vmlinuz-virtual | cut -d: -f2 | sed 's/ //')
+      rid=$(glance -A #{node[:keystone][:admin_token]} add name="ubuntu-11.04-initrd" disk_format=ari container_format=ari < images/natty-server-uec-amd64-loader | cut -d: -f2 | sed 's/ //')
+      glance -A #{node[:keystone][:admin_token]} add name="ubuntu-11.04-server" disk_format=ami container_format=ami kernel_id=$kid ramdisk_id=$rid < images/natty-server-uec-amd64.img
 
   EOH
   # not_if do File.exists?("/var/lib/glance/images/3") end
