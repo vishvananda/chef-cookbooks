@@ -31,6 +31,7 @@
 # COMPUTE
 --compute_manager=nova.compute.manager.ComputeManager
 --sql_connection=mysql://<%= @user %>:<%= @passwd %>@<%= @ip_address %>/<%= @db_name %>
+--connection_type=libvirt
 --libvirt_type=<%= @virt_type %>
 
 # VNCPROXY
