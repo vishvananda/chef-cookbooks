@@ -84,6 +84,13 @@ execute "a2enmod wsgi" do
   not_if "test -L /etc/apache2/mods-enabled/wsgi.load"
 end
 
+execute "a2enmod ssl" do
+  command "a2enmod ssl"
+  action :run
+  notifies :restart, resources(:service => "apache2"), :immediately
+  not_if "test -L /etc/apache2/mods-enabled/ssl.load"
+end
+
 execute "a2ensite nova-api" do
   command "a2ensite nova-api"
   action :run
