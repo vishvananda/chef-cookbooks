@@ -1,3 +1,19 @@
+Listen 8773
+<VirtualHost *:8773>
+  WSGIScriptAlias / /var/lib/nova/nova-ec2.wsgi
+  WSGIDaemonProcess ec2 user=nova group=nogroup processes=3 threads=10 python-path=/usr/share/pyshared/nova
+  WSGIProcessGroup nova
+
+  # SSL Config
+  SSLEngine on
+  SSLCertificateFile /etc/ssl/certs/dipstick02.rackspace.corp.crt
+  SSLCertificateKeyFile /etc/ssl/private/dipstick02.rackspace.corp.key
+
+  ErrorLog /var/log/nova/nova-ec2.log
+  LogLevel warn
+  CustomLog /var/log/nova/nova-ec2.log combined
+</VirtualHost>
+
 Listen 8774
 <VirtualHost *:8774>
   WSGIScriptAlias / /var/lib/nova/nova-api.wsgi
@@ -6,10 +22,44 @@ Listen 8774
 
   # SSL Config
   SSLEngine on
-  SSLCertificateFile /etc/ssl/certs/ssl-cert-snakeoil.pem
-  SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key
+  SSLCertificateFile /etc/ssl/certs/dipstick02.rackspace.corp.crt
+  SSLCertificateKeyFile /etc/ssl/private/dipstick02.rackspace.corp.key
 
   ErrorLog /var/log/nova/nova-api.log
   LogLevel warn
   CustomLog /var/log/nova/nova-api.log combined
 </VirtualHost>
+
+Listen 8775
+<VirtualHost *:8775>
+  WSGIScriptAlias / /var/lib/nova/nova-metadata.wsgi
+  WSGIDaemonProcess metadata user=nova group=nogroup processes=3 threads=10 python-path=/usr/share/pyshared/nova
+  WSGIProcessGroup nova
+
+  # SSL Config
+  # SSLEngine on
+  # SSLCertificateFile /etc/ssl/certs/dipstick02.rackspace.corp.crt
+  # SSLCertificateKeyFile /etc/ssl/private/dipstick02.rackspace.corp.key
+
+  ErrorLog /var/log/nova/nova-metadata.log
+  LogLevel warn
+  CustomLog /var/log/nova/nova-metadata.log combined
+</VirtualHost>
+
+
+Listen 8776
+<VirtualHost *:8776>
+  WSGIScriptAlias / /var/lib/nova/nova-volume.wsgi
+  WSGIDaemonProcess osapi_volume user=nova group=nogroup processes=3 threads=10 python-path=/usr/share/pyshared/nova
+  WSGIProcessGroup nova
+
+  # SSL Config
+  SSLEngine on
+  SSLCertificateFile /etc/ssl/certs/dipstick02.rackspace.corp.crt
+  SSLCertificateKeyFile /etc/ssl/private/dipstick02.rackspace.corp.key
+
+  ErrorLog /var/log/nova/nova-volume.log
+  LogLevel warn
+  CustomLog /var/log/nova/nova-volume.log combined
+</VirtualHost>
+
