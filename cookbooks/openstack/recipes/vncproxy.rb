@@ -23,7 +23,7 @@ package "nova-novnc" do
   action :upgrade
 end
 
-%w{nova-vncproxy nova-console nova-consoleauth}.each do |svc|
+%w{nova-vncproxy nova-xvpvncproxy nova-console nova-consoleauth}.each do |svc|
   package svc do
     action :upgrade
   end
