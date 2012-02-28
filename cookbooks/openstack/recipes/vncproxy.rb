@@ -23,18 +23,23 @@ package "nova-novnc" do
   action :upgrade
 end
 
-package "nova-vncproxy" do
-  action :upgrade
+%w{nova-vncproxy nova-console nova-consoleauth}.each do |svc|
+  package svc do
+    action :upgrade
+  end
+
+  service svc do
+    supports :status => true, :restart => true
+    action :enable
+    subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
+  end
 end
 
-execute "Fix permission Bug" do
-  command "sed -i 's/nova$/root/g' /etc/init/nova-vncproxy.conf"
-  action :run
-  only_if "egrep 'exec.*nova$' /etc/init/nova-vncproxy.conf"
-end
 
-service "nova-vncproxy" do
-  supports :status => true, :restart => true
-  action :enable
-  subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
-end
+
+# execute "Fix permission Bug" do
+#   command "sed -i 's/nova$/root/g' /etc/init/nova-vncproxy.conf"
+#   action :run
+#   only_if "egrep 'exec.*nova$' /etc/init/nova-vncproxy.conf"
+# end
+
