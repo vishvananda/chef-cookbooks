@@ -53,11 +53,17 @@ file "/var/lib/glance/glance.sqlite" do
     action :delete
 end
 
+directory "/etc/glance" do
+  owner "glance"
+  group "glance"
+  mode "0750"
+end
+
 template "/etc/glance/glance-registry.conf" do
   source "glance-registry.conf.erb"
-  owner "root"
-  group "root"
-  mode "0644"
+  owner "glance"
+  group "glance"
+  mode "0640"
   variables(
     :registry_port => node[:glance][:registry_port],
     :user => node[:glance][:db_user],
@@ -73,9 +79,9 @@ end
 
 template "/etc/glance/glance-api.conf" do
   source "glance-api.conf.erb"
-  owner "root"
-  group "root"
-  mode "0644"
+  owner "glance"
+  group "glance"
+  mode "0640"
   variables(
     :api_port => node[:glance][:api_port],
     :registry_port => node[:glance][:registry_port],
@@ -89,9 +95,9 @@ end
 
 template "/etc/glance/glance-scrubber.conf" do
   source "glance-scrubber.conf.erb"
-  owner "root"
-  group "root"
-  mode "0644"
+  owner "glance"
+  group "glance"
+  mode "0640"
   variables(
     :user => node[:glance][:db_user],
     :passwd => node[:glance][:db_passwd],
@@ -102,9 +108,9 @@ end
 
 template "/etc/glance/glance-api-paste.ini" do
   source "glance-api-paste.ini.erb"
-  owner "root"
-  group "root"
-  mode "0644"
+  owner "glance"
+  group "glance"
+  mode "0640"
   variables(
     :ip_address => node[:controller_ipaddress],
     :service_port => node[:keystone][:service_port],
@@ -116,9 +122,9 @@ end
 
 template "/etc/glance/glance-registry-paste.ini" do
   source "glance-registry-paste.ini.erb"
-  owner "root"
-  group "root"
-  mode "0644"
+  owner "glance"
+  group "glance"
+  mode "0640"
   variables(
     :ip_address => node[:controller_ipaddress],
     :service_port => node[:keystone][:service_port],
@@ -130,9 +136,9 @@ end
 
 template "/etc/glance/policy.json" do
   source "glance-api-policy.json.erb"
-  owner "root"
-  group "root"
-  mode "0644"
+  owner "glance"
+  group "glance"
+  mode "0640"
   notifies :restart, resources(:service => "glance-api"), :immediately
 end
 
