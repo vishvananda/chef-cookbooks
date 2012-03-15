@@ -5,6 +5,7 @@
 --logdir=/var/log/nova
 --state_path=/var/lib/nova
 --lock_path=/var/lock/nova
+--nouse_stderr
 
 # RABBITMQ
 --rabbit_password=guest
@@ -23,6 +24,15 @@
 #--fixed_range=10.20.1.0/24
 #--flat_network_dhcp_start=10.20.1.2
 #--public_interface=eth0
+<% if node[:use_quantum] then -%>
+# These are set for quantum on both compute and infra nodes
+--network_manager=nova.network.quantum.manager.QuantumManager
+--linuxnet_interface_driver=nova.network.linux_net.LinuxOVSInterfaceDriver
+--quantum_use_dhcp
+--libvirt_ovs_bridge=<%= node[:quantum][:integration_bridge] %>
+--libvirt_vif_type=ethernet
+--libvirt_vif_driver=nova.virt.libvirt.vif.LibvirtOpenVswitchDriver
+<% end -%>
 
 # GLANCE
 --image_service=nova.image.glance.GlanceImageService

@@ -1,0 +1,5 @@
+[DATABASE]
+sql_connection = mysql://<%= node[:quantum][:db_user] %>:<%= node[:quantum][:db_passwd] %>@<%= node[:controller_ipaddress] %>:3306/<%= node[:quantum][:db] %>
+
+[OVS]
+integration-bridge = <%= node[:quantum][:integration_bridge] %>

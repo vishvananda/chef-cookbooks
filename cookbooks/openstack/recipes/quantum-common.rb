@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: memcache
-# Recipe:: default
+# Cookbook Name:: openstack
+# Recipe:: quantum-common
 #
 # Copyright 2009, Example Com
 #
@@ -17,18 +17,22 @@
 # limitations under the License.
 #
 
-include_recipe "openstack::apt"
-include_recipe "openssh::default"
+# stuff that needs to be done on both compute and infrastructure nodes
 
-include_recipe "openstack::rabbitmq"
-include_recipe "openstack::mysql"
-include_recipe "openstack::keystone"
-include_recipe "openstack::glance"
-if node[:use_quantum] then
-  include_recipe "openstack::quantum-server"
+[ "/etc/quantum", "/etc/quantum/plugins", "/etc/quantum/plugins/openvswitch" ]. each do |dir|
+  directory dir do
+    owner "quantum"
+    group "root"
+    mode "0750"
+  end
 end
-include_recipe "openstack::nova-setup"
-include_recipe "openstack::scheduler"
-include_recipe "openstack::api"
-include_recipe "openstack::vncproxy"
-include_recipe "openstack::dashboard"
+
+# the db should already be set up
+template "/etc/quantum/plugins/openvswitch/ovs_quantum_plugin.ini" do
+  source "ovs_quantum_plugin.ini.erb"
+  owner "quantum"
+  group "root"
+  mode "0640"
+end
+
+

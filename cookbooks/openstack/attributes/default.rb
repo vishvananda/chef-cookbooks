@@ -20,6 +20,11 @@ default[:keystone][:service_port] = "5000"
 default[:keystone][:admin_port] = "35357"
 default[:keystone][:admin_token] = "999888777666"
 
+default[:quantum][:db] = "quantum"
+default[:quantum][:db_user] = "quantum"
+default[:quantum][:db_passwd] = "quantum"
+default[:quantum][:integration_bridge] = "br-int"
+
 default[:dash][:db] = "dash"
 default[:dash][:db_user] = "dash"
 default[:dash][:db_passwd] = "dash"
@@ -44,6 +49,9 @@ default[:private][:num_networks] = "1"
 default[:private][:network_size] = "255"
 default[:private][:bridge] = "br200"
 default[:private][:bridge_dev] = "eth3"
+
+default[:use_public_net] = true
+default[:use_private_net] = false
 
 default[:package_url] = "http://ops.monkeypuppetlabs.com/packages"
 default[:package_release] = node[:lsb][:codename]

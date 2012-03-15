@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# extract the mysql root pass fropm the attributes file for easy reference 
+# extract the mysql root pass fropm the attributes file for easy reference
 # later in the recipe
 root_pass = node['mysql']['root_pass']
 
@@ -42,8 +42,6 @@ template "/var/cache/local/preseeding/mysql-server.seed" do
   notifies :run, resources(:execute => "preseed mysql-server"), :immediately
 end
 
-
-
 # go ahead and install
 package "mysql-server" do
   action :install
@@ -67,7 +65,12 @@ template "/etc/mysql/conf.d/nova-mysql.cnf" do
   notifies :restart, resources(:service => "mysql"), :immediately
 end
 
-["nova", "glance", "keystone", "dash"].each do |service|
+service_list=["nova", "glance", "keystone", "dash" ]
+if node[:use_quantum] then
+  service_list << "quantum"
+end
+
+service_list.each do |service|
   execute "create #{service} database schema" do
     command "mysql -u root  -p#{root_pass} -e 'create database #{node[service][:db]}'"
     action :run
@@ -75,7 +78,7 @@ end
   end
 end
 
-["nova", "glance", "keystone", "dash"].each do |service|
+service_list.each do |service|
   execute "create #{service} user" do
     command "mysql -u root -p#{root_pass} -e \"grant all privileges on #{node[service][:db]}.* to '#{node[service][:db_user]}'@'%'\""
     action :run
@@ -83,7 +86,7 @@ end
   end
 end
 
-["nova", "glance", "keystone", "dash"].each do |service|
+service_list.each do |service|
   execute "set #{service} user password" do
     command "mysql -u root -p#{root_pass} -e \"SET PASSWORD for '#{node[service][:db_user]}'@'%' = PASSWORD('#{node[service][:db_passwd]}')\""
     not_if "mysql -u root -e -p#{root_pass}\"select * from mysql.user where user='#{node[service][:db_user]}' and password=PASSWORD('#{node[service][:db_passwd]}')\\G\"| grep #{node[service][:db_user]}"
