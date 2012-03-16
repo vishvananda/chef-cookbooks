@@ -32,6 +32,7 @@
 --libvirt_ovs_bridge=<%= node[:quantum][:integration_bridge] %>
 --libvirt_vif_type=ethernet
 --libvirt_vif_driver=nova.virt.libvirt.vif.LibvirtOpenVswitchDriver
+--quantum_connection_host=<%= @ip_address %>
 <% end -%>
 
 # GLANCE

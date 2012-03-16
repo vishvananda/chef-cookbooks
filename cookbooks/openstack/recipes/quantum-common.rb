@@ -19,7 +19,7 @@
 
 # stuff that needs to be done on both compute and infrastructure nodes
 
-package "quantum-common" do
+package "python-quantumclient" do
   action :upgrade
   options "-o Dpkg::Options::='--force-confold' -o Dpkg::Options::='--force-confdef' --force-yes"
 

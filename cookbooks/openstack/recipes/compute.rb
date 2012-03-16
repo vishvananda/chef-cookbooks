@@ -19,11 +19,12 @@
 
 include_recipe "openstack::nova-common"
 include_recipe "openstack::api"
-include_recipe "openstack::network"
 
 if node[:use_quantum] then
   include_recipe "openstack::quantum-compute"
 end
+
+include_recipe "openstack::network"
 
 package "mysql-client" do
 	action :install

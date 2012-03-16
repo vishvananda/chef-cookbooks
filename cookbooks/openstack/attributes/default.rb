@@ -1,3 +1,5 @@
+default[:controller_ipaddress] = node[:ipaddress]
+
 default[:mysql][:root_pass] = "secrete"
 
 default[:nova][:db] = "nova"
@@ -57,5 +59,4 @@ default[:package_url] = "http://ops.monkeypuppetlabs.com/packages"
 default[:package_release] = node[:lsb][:codename]
 default[:package_component] = "diablo-final"
 
-default[:controller_ipaddress] = node[:ipaddress]
 default[:virt_type] = "kvm"

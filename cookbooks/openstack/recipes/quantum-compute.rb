@@ -23,8 +23,7 @@ include_recipe "openstack::quantum-common"
 
 # we need to find out what kernel we're running so we can get the right headers for dkms
 
-kernel_version=`uname -r`.chomp
-[ "linux-headers-#{kernel_version}", "dkms", "openvswitch-datapath-dkms" ].each do |pkg|
+[ "linux-headers-#{`uname -r`.chomp}", "dkms", "openvswitch-datapath-dkms" ].each do |pkg|
   package pkg do
     action :install
     options "-o Dpkg::Options::='--force-confold' -o Dpkg::Options::='--force-confdef' --force-yes"
@@ -32,18 +31,16 @@ kernel_version=`uname -r`.chomp
 end
 
 # some module hackery, please...
-openvswitch_version=`ls -d /usr/src/openvswitch-*`.split("-").last.chomp
-
 execute "build openvswitch-datapath modules" do
-  command "dkms build -m openvswitch -v #{openvswitch_version}"
+  command "dkms build -m openvswitch -v $(ls -d /usr/src/openvswitch-* | head -n1 | cut -d- -f2)"
   action :run
-  not_if "[ -e /var/lib/dkms/openvswitch/#{openvswitch_version}/`uname -r`/`uname -m`/module/openvswitch_mod.ko ]"
+  not_if "[ -e /var/lib/dkms/openvswitch/$(ls -d /usr/src/openvswitch-* | head -n1 | cut -d- -f2)/$(uname -r)/$(uname -m)/module/openvswitch_mod.ko ]"
 end
 
 execute "install openvswitch-datapath modules" do
-  command "dkms install -m openvswitch -v #{openvswitch_version}"
+  command "dkms install -m openvswitch -v $(ls -d /usr/src/openvswitch-* | head -n1 | cut -d- -f2)"
   action :run
-  not_if "[ -e /lib/modules/`uname -r`/updates/dkms/openvswitch_mod.ko ]"
+  not_if "[ -e /lib/modules/$(uname -r)/updates/dkms/openvswitch_mod.ko ]"
 end
 
 execute "modprobe openvswitch-datapath modules" do
