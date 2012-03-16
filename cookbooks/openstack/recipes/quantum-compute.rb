@@ -23,7 +23,7 @@ include_recipe "openstack::quantum-common"
 
 # we need to find out what kernel we're running so we can get the right headers for dkms
 
-kernel_version=`uname -r`.chomp!
+kernel_version=`uname -r`.chomp
 [ "linux-headers-#{kernel_version}", "dkms", "openvswitch-datapath-dkms" ].each do |pkg|
   package pkg do
     action :install
@@ -32,7 +32,7 @@ kernel_version=`uname -r`.chomp!
 end
 
 # some module hackery, please...
-openvswitch_version=`ls -d /usr/src/openvswitch-*`.split("-").last.chomp!
+openvswitch_version=`ls -d /usr/src/openvswitch-*`.split("-").last.chomp
 
 execute "build openvswitch-datapath modules" do
   command "dkms build -m openvswitch -v #{openvswitch_version}"
