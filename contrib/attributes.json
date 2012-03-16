@@ -1,0 +1,23 @@
+{
+    "controller_ipaddress": "192.168.122.119",
+
+    "use_quantum": true,
+    "public": {
+	"label": "public",
+	"num_networks": "1",
+	"network_size": "255",
+	"bridge": "br100",
+	"bridge_dev": "eth0.100",
+	"dns1": "8.8.8.8",
+	"dns2": "8.8.4.4"
+    },
+
+    "glance": {
+	"images": [ "tty" ]
+    },
+
+    "package_url": "http://build.monkeypuppetlabs.com/proposed-packages",
+    "package_release": "oneiric",
+    "package_component": "essex-e3",
+    "virt_type": "qemu",
+}
