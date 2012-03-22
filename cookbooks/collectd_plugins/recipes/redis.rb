@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: collectd_plugins
-# Recipe:: default
+# Recipe:: redis
 #
 # Copyright 2010, Atari, Inc
 #
@@ -19,12 +19,21 @@
 
 include_recipe "collectd"
 
-# Include standard plugins
-include_recipe "collectd_plugins::syslog"
-include_recipe "collectd_plugins::rrdtool"
-include_recipe "collectd_plugins::cpu"
-include_recipe "collectd_plugins::df"
-include_recipe "collectd_plugins::disk"
-include_recipe "collectd_plugins::interface"
-include_recipe "collectd_plugins::memory"
-include_recipe "collectd_plugins::swap"
+cookbook_file File.join(node[:collectd][:plugin_dir], "redis.py") do
+  owner "root"
+  group "root"
+  mode "644"
+end
+
+servers = []
+if node[:recipes].include? "redis::server"
+  servers << "localhost"
+else
+  search(:node, 'recipes:"redis::server"') do |server|
+    servers << server["fqdn"]
+  end
+end
+
+collectd_python_plugin "redis" do
+  options :host=>servers, :verbose=>true
+end
