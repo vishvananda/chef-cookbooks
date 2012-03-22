@@ -16,6 +16,9 @@
 [submodule "cookbooks/ntp"]
 	path = cookbooks/ntp
 	url = git://github.com/opscode-cookbooks/ntp.git
+[submodule "cookbooks/openssh"]
+	path = cookbooks/openssh
+	url = git://github.com/opscode-cookbooks/openssh.git
 [submodule "cookbooks/openssl"]
 	path = cookbooks/openssl
 	url = git://github.com/opscode-cookbooks/openssl.git
@@ -32,5 +35,5 @@
 	path = cookbooks/collectd
 	url = git://github.com/coderanger/chef-collectd.git
 [submodule "cookbooks/collectd_plugins"]
-	path = cookbooks/collectd
+	path = cookbooks/collectd_plugins
 	url = git://github.com/coderanger/chef-collect_plugins.git
